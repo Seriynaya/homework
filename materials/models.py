@@ -57,6 +57,9 @@ class Lesson(models.Model):
         verbose_name="Ссылка на видео",
         help_text="Загрузите ссылку на видео",
     )
+    course = models.ForeignKey(
+        Course, on_delete=models.SET_NULL, verbose_name="Курс", blank=True, null=True, related_name='lessons'
+    )
 
     class Meta:
         verbose_name = "Урок"
