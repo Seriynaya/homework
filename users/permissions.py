@@ -4,7 +4,7 @@ class IsModer(permissions.BasePermission):
     message = 'Вы не имеете прав модератора'
 
     def has_permission(self, request, view):
-        return request.user.groups.filter(name='Модератор').exists()
+        return request.user.groups.filter(name='Moder').exists()
 
 
 class IsOwner(permissions.BasePermission):
