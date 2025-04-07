@@ -1,6 +1,7 @@
 from django.db import models
 from config.settings import AUTH_USER_MODEL
 
+
 class Course(models.Model):
     name = models.CharField(
         max_length=100,
@@ -81,3 +82,25 @@ class Lesson(models.Model):
 
         def __str__(self):
             return self.name
+
+
+class Subscribe(models.Model):
+    user = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="subscribe_user",
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name="Курс",
+        related_name="subscribe_course",
+    )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+
+        def __str__(self):
+            return f"{self.user} - {self.course}"
