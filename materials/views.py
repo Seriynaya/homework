@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+
 from django.views.generic import TemplateView
+from rest_framework import status
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -7,10 +10,12 @@ from rest_framework.generics import (
     RetrieveAPIView,
     UpdateAPIView,
 )
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from materials.models import Course, Lesson
-from materials.serializers import CourseSerializer, LessonSerializer
+from materials.models import Course, Lesson, Subscribe
+from materials.serializers import CourseSerializer, LessonSerializer, SubscribeSerializer
 from rest_framework.permissions import IsAuthenticated
 from users.permissions import IsModer, IsOwner
 from materials.serializers import CourseDetailSerializer
@@ -75,3 +80,20 @@ class LessonDestroyApiView(DestroyAPIView):
 
 class HomePageView(TemplateView):
     template_name = "home.html"
+
+
+class SubscribeAPIView(APIView):
+    serializer_class = SubscribeSerializer
+
+    def post(self, *args, **kwargs):
+        user = self.request.user
+        course_id = self.request.data.get("course")
+        course = get_object_or_404(Course, pk=course_id)
+        subs_item = Subscribe.objects.all().filter(user=user).filter(course=course)
+        if subs_item.exists():
+            subs_item.delete()
+            message = "Подписка удалена"
+        else:
+            Subscribe.objects.create(user=user, course=course)
+            message = "Подписка добавлена"
+        return Response({"message": message}, status=status.HTTP_201_CREATED)

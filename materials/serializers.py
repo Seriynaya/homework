@@ -1,7 +1,7 @@
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
-from materials.models import Course, Lesson
+from materials.models import Course, Lesson, Subscribe
 
 
 class CourseSerializer(ModelSerializer):
@@ -26,3 +26,9 @@ class CourseDetailSerializer(ModelSerializer):
     class Meta:
         model = Course
         fields = ("name", "description", "count_lessons", "lessons")
+
+
+class SubscribeSerializer(ModelSerializer):
+    class Meta:
+        model = Subscribe
+        fields = "__all__"
