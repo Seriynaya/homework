@@ -1,24 +1,19 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 from rest_framework import status
-from rest_framework.generics import (
-    CreateAPIView,
-    DestroyAPIView,
-    ListAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-)
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson, Subscribe
-from materials.serializers import CourseSerializer, LessonSerializer, SubscribeSerializer
-from rest_framework.permissions import IsAuthenticated
+from materials.serializers import (CourseDetailSerializer, CourseSerializer,
+                                   LessonSerializer, SubscribeSerializer)
 from users.permissions import IsModer, IsOwner
-from materials.serializers import CourseDetailSerializer
+
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
@@ -48,11 +43,11 @@ class LessonCreateApiView(CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (~IsModer, IsAuthenticated)
+
     def perform_create(self, serializer):
         lesson = serializer.save()
         lesson.owner = self.request.user
         lesson.save()
-
 
 
 class LessonListApiView(ListAPIView):
