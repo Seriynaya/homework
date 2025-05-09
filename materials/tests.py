@@ -1,4 +1,5 @@
 from django.urls import reverse
+from rest_framework.status import HTTP_201_CREATED
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -103,7 +104,7 @@ class SubscribeTestCase(APITestCase):
         data = {"user": self.user.pk, "course": self.course.pk}
         response = self.client.post(self.url, data)
         temp_data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(temp_data.get("message"), "Подписка добавлена")
         self.assertEqual(Subscribe.objects.all().count(), 1)
 
@@ -115,6 +116,6 @@ class SubscribeTestCase(APITestCase):
         }
         response = self.client.post(self.url, data=data)
         temp_data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(temp_data.get("message"), "Подписка удалена")
         self.assertEqual(Subscribe.objects.all().count(), 0)
