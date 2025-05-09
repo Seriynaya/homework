@@ -113,3 +113,5 @@ jobs:
             docker rm myapp || true
             docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           EOF
+      - name: Debug SSH key
+        run: echo "${{ secrets.SSH_KEY }}" | head -c 50
