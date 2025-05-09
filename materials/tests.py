@@ -69,9 +69,9 @@ class LessonTestCase(APITestCase):
         result = [
             {
                 "id": self.lesson.pk,
-                "video_url": None,
                 "name": self.lesson.name,
                 "description": self.lesson.description,
+                "video_url": None,
                 "preview_image": None,
                 "course": self.course.pk,
                 "owner": self.user.pk,
