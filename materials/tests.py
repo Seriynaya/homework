@@ -37,9 +37,11 @@ class LessonTestCase(APITestCase):
             "course": self.course.pk,
         }
         response = self.client.post(url, data)
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Lesson.objects.all().count(), 2)
+        response_data = response.json()
+        self.assertEqual(response_data["name"], "test lesson")
+        self.assertEqual(response_data["description"], "test lesson description")
 
     def test_lesson_update(self):
         url = reverse("materials:lesson_update", args=(self.lesson.pk,))
@@ -72,7 +74,7 @@ class LessonTestCase(APITestCase):
                 "name": self.lesson.name,
                 "description": self.lesson.description,
                 "video_url": None,
-                "preview_image": None,
+                "preview": None,  # Изменено с preview_image на preview
                 "course": self.course.pk,
                 "owner": self.user.pk,
             }
