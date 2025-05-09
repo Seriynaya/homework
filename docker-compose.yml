@@ -41,7 +41,7 @@ services:
   celery:
     build:
       context: .
-    command: celery -A config worker -l INFO
+    command: celery -A pythonProject2 worker -l INFO
     volumes:
       - .:/app
     depends_on:
@@ -51,7 +51,7 @@ services:
   celery_beat:
     build:
       context: .
-    command: celery -A config beat -l INFO -S django
+    command: celery -A pythonProject2 beat -l INFO -S django
     volumes:
        - .:/app
     depends_on:
