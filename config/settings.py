@@ -14,7 +14,6 @@ import os
 import sys
 from pathlib import Path
 from datetime import timedelta
-from django.conf.global_settings import AUTH_USER_MODEL, MEDIA_ROOT, MEDIA_URL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -184,4 +183,3 @@ if 'test' in sys.argv:
             'NAME': BASE_DIR / 'test_db.sqlite3',
         }
     }
-
