@@ -59,6 +59,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Wait for PostgreSQL
+      run: |
+       for i in {1..10}; do
+         nc -z localhost 5432 &amp;&amp; break
+         sleep 2
+       done
+
     - name: Run migrations
       run: python manage.py migrate
       env:
@@ -72,6 +79,9 @@ jobs:
     needs: test
 
     steps:
+      - name: Check PostgreSQL
+        run: docker ps
+
       - name: Check out code
         uses: actions/checkout@v3
 
