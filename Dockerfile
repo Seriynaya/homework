@@ -18,7 +18,8 @@ COPY . .
 ENV SECRET_KEY="django-insecure-qw&5xfnqmd&79qhcq(d_twvpx@yu%q$k9&fluk=g06!6eea&b7"
 ENV CELERY_BROKER_URL="redis://localhost:6379"
 ENV CELERY_BACKEND="redis://localhost:6379"
-
+RUN python manage.py collectstatic --noinput
+RUN mkdir -p /app/static
 RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
 
 EXPOSE 8000
