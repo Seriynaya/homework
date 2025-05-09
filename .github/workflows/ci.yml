@@ -60,7 +60,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run migrations
-      run: poetry run python manage.py migrate
+      run: run python manage.py migrate
       env:
         SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
