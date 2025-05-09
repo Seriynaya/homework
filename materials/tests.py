@@ -64,22 +64,19 @@ class LessonTestCase(APITestCase):
         url = reverse("materials:lesson_list")
         response = self.client.get(url)
         data = response.json()
-        result = {
-            "count": 1,
-            "next": None,
-            "previous": None,
-            "results": [
-                {
-                    "id": self.lesson.pk,
-                    "video_url": None,
-                    "name": self.lesson.name,
-                    "description": self.lesson.description,
-                    "preview_image": None,
-                    "course": self.course.pk,
-                    "owner": self.user.pk,
-                }
-            ],
-        }
+
+        # Если API возвращает список без пагинации
+        result = [
+            {
+                "id": self.lesson.pk,
+                "video_url": None,
+                "name": self.lesson.name,
+                "description": self.lesson.description,
+                "preview_image": None,
+                "course": self.course.pk,
+                "owner": self.user.pk,
+            }
+        ]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data, result)
 
