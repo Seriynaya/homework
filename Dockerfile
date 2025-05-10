@@ -1,6 +1,5 @@
 FROM python:3.12
 
-
 WORKDIR /app
 
 RUN apt-get update \
@@ -9,7 +8,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./
-
+RUN pip install celery gunicorn
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
@@ -18,8 +17,9 @@ ENV SECRET_KEY="django-insecure-qw&5xfnqmd&79qhcq(d_twvpx@yu%q$k9&fluk=g06!6eea&
 ENV CELERY_BROKER_URL="redis://localhost:6379"
 ENV CELERY_BACKEND="redis://localhost:6379"
 
-RUN mkdir -p /app/media
+RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
+RUN python manage.py collectstatic --noinput || echo "Static files collection failed"
 
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]

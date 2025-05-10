@@ -2,7 +2,9 @@ services:
   web:
     build: .
     command: >
-        bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+          bash -c "sleep 20 && 
+          python manage.py migrate && 
+          python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
       - static_volume:/code/static
@@ -18,10 +20,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg-isready -U postgres"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     env_file:
       - .env
 
@@ -41,7 +44,7 @@ services:
   celery:
     build:
       context: .
-    command: celery -A config worker -l INFO
+    command: celery -A pythonProject2 worker -l INFO
     volumes:
       - .:/app
     depends_on:
@@ -51,13 +54,22 @@ services:
   celery_beat:
     build:
       context: .
-    command: celery -A config beat -l INFO -S django
+    command: celery -A pythonProject2 beat -l INFO -S django
     volumes:
        - .:/app
     depends_on:
       - db
       - redis
       - celery
+  nginx:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - web
 
 
 networks:
