@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from rest_framework import status
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
